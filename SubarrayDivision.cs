@@ -129,17 +129,39 @@ class Result
      *  3. INTEGER m
      */
 
-    // Finds all combinations of m numbers in List s that sum to d.
-    // Returns a count of those combinations.
+    // Finds all contiguous runs of m numbers in List s that sum to d.
+    // Returns a count of those runs.
     public static int birthday(List<int> s, int d, int m)
     {
         int count = 0;
-        // The constraints say that n is less than 100.
-        // Just test all (at most, 10,000) possible combinations?
-        // No. It's not even necessary to test all possible combinations:
-        // "Lily decides to share a contiguous segment"
-        // The continguous segment requirement should make this easier.
-        // We just need to test whether each m element window in the list sums to d.
+        
+        // The problem statement doesn't say what to do if m > n. However, if m > n, then
+        // there can be no segment of length m, meaning our answer must be 0.
+        // Otherwise, test whether each m element window in the list sums to d.
+        if (m <= s.Count) {
+            int sum = 0;
+            int start = 0;
+
+            // Get the sum of the first window.
+            for (int i = 0; i <= m - 1; i++)
+                sum += s[i];
+            
+            if (sum == d)
+                count++;
+            
+            // Check each window's sum and count the windows that sum to d.
+            for (int end = m; end < s.Count; end++) {
+                // Move the window right.
+                sum -= s[start];
+                sum += s[end];
+                start++;
+                
+                if (sum == d)
+                    count++;
+            }
+        }
+        
+        return count;
     }
 
 }
